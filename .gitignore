@@ -1,0 +1,28 @@
+# Bağımlılıklar
+node_modules/
+
+# Derleme çıktıları (kaynaktan üretilir)
+dist/
+release/
+out/
+*.tsbuildinfo
+
+# Ortam / gizli dosyalar
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+
+# Editör, işletim sistemi, araçlar
+.vscode/
+.idea/
+.claude/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Loglar
+npm-debug.log*
+*.log
