@@ -1,8 +1,11 @@
 name: Release
 
-# "v" ile başlayan bir etiket gönderildiğinde (ör. v2.0.1) üç platformda
-# kurulum dosyalarını üretir ve GitHub Releases'te TASLAK bir sürüme yükler.
-# Yayınlanan sürümler, kurulu uygulamalara otomatik güncelleme olarak gider.
+# "v" ile başlayan bir etiket gönderildiğinde (ör. v2.0.1):
+#  1. Üç platformda test eder ve kurulum dosyalarını üretir,
+#  2. dosyaları iş akışı çıktısı (artifact) olarak saklar,
+#  3. hepsini tek bir GitHub sürümünde yayınlar.
+# Yayınlanan sürümdeki latest*.yml dosyaları kurulu uygulamaların otomatik
+# güncellemesini sağlar.
 on:
   push:
     tags: ['v*']
@@ -19,26 +22,63 @@ jobs:
         include:
           - os: windows-latest
             target: --win
+            name: windows
           - os: macos-latest
             target: --mac
+            name: macos
           - os: ubuntu-latest
             target: --linux
+            name: linux
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
       - run: npx vite build
-      - name: Paketle ve yayınla
-        run: npx electron-builder ${{ matrix.target }} --publish always
+      - name: Paketle
+        run: npx electron-builder ${{ matrix.target }} --publish never
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Kod imzalama (isteğe bağlı): sertifika depo sırlarına eklenirse kullanılır.
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           CSC_IDENTITY_AUTO_DISCOVERY: ${{ matrix.os == 'macos-latest' && 'false' || 'true' }}
+      - name: Üretilen dosyalar
+        shell: bash
+        run: ls -la release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finans-takip-${{ matrix.name }}
+          if-no-files-found: error
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.zip
+            release/*.AppImage
+            release/*.blockmap
+            release/latest*.yml
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist-release
+          merge-multiple: true
+      - name: Yayınlanacak dosyalar
+        run: ls -la dist-release
+      - name: GitHub sürümünü oluştur
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Finans Takip ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: dist-release/*

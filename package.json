@@ -52,8 +52,7 @@
     ],
     "publish": [
       {
-        "provider": "github",
-        "releaseType": "draft"
+        "provider": "github"
       }
     ],
     "win": {
@@ -70,7 +69,8 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "icon": "build/icon.png"
     },

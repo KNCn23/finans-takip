@@ -117,9 +117,10 @@ git push --follow-tags
 ```
 
 [`release.yml`](.github/workflows/release.yml) testleri çalıştırır, üç platformda paketler
-ve GitHub Releases'te **taslak** bir sürüm oluşturur. Taslağı yayınladığınızda kurulu
-uygulamalar güncellemeyi kendiliğinden alır. GitHub deposu git remote'tan otomatik
-bulunur, ayrıca ayar gerekmez.
+ve kurulum dosyalarını GitHub Releases'te **yayınlanmış** bir sürüm olarak yükler. Kurulu
+uygulamalar güncellemeyi kendiliğinden alır. Dosyalar ayrıca iş akışı sayfasında
+"artifact" olarak da indirilebilir. GitHub deposu git remote'tan otomatik bulunur, ayrıca
+ayar gerekmez.
 
 ### Kod imzalama (isteğe bağlı)
 
