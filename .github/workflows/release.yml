@@ -72,6 +72,17 @@ jobs:
           merge-multiple: true
       - name: Yayınlanacak dosyalar
         run: ls -la dist-release
+      - name: Güncelleme dosyalarını doğrula
+        # latest*.yml içindeki her dosya yüklenecekler arasında olmalı;
+        # yoksa otomatik güncelleme bozuk dosyaya yönlenir.
+        run: |
+          set -e
+          for y in dist-release/latest*.yml; do
+            for f in $(grep -E '^\s*-?\s*url:' "$y" | sed -E 's/.*url:\s*//'); do
+              test -f "dist-release/$f" || { echo "$y içinde geçen $f bulunamadı"; exit 1; }
+              echo "$y → $f ✓"
+            done
+          done
       - name: GitHub sürümünü oluştur
         uses: softprops/action-gh-release@v2
         with:

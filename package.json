@@ -1,6 +1,6 @@
 {
   "name": "finans-takip",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Şirket ve kişisel finans yönetimi: nakit akışı, cari, çek/senet, kredi, kart ve bütçe takibi",
   "author": "Kaan Canolcay",
   "license": "MIT",
@@ -65,7 +65,8 @@
       "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
-      "deleteAppDataOnUninstall": false
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Finans-Takip-Setup-${version}.${ext}"
     },
     "mac": {
       "target": [
@@ -80,6 +81,7 @@
       ],
       "category": "Office",
       "icon": "build/icon.png"
-    }
+    },
+    "artifactName": "Finans-Takip-${version}-${arch}.${ext}"
   }
 }

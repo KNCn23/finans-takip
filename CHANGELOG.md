@@ -1,5 +1,14 @@
 # Değişiklikler
 
+## 2.0.1 — 2026-10-08
+
+- Kurulum dosyası adları boşluksuz sabitlendi (`Finans-Takip-Setup-2.0.1.exe`). 2.0.0
+  sürümünde GitHub'a aynı dosyanın iki kopyası yüklenmişti ve otomatik güncelleme
+  dosyası (`latest.yml`) eski kopyayı gösteriyordu.
+- Yayın iş akışı artık `latest*.yml` dosyalarının gösterdiği her dosyanın yüklendiğini
+  yayından önce doğruluyor.
+- Uygulama kodunda değişiklik yok.
+
 ## 2.0.0 — 2026-10-08
 
 Uygulama, kaynak kodu kaybolan 1.0 sürümünün derlenmiş paketinden okunabilir
